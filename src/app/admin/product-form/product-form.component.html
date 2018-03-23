@@ -8,9 +8,12 @@
     <label  for="price">price</label>
     <div class="input-group">
       <span class="input-group-addon">MDL</span>
-      <input #price="ngModel" ngModel name="price" id="price" type="number" class="form-control" required>
+      <input #price="ngModel" ngModel name="price" id="price" type="number" class="form-control" required [min]="0">
     </div>
-    <div class="alert alert-danger" *ngIf="price.touched && price.invalid">price is required</div>
+    <div class="alert alert-danger" *ngIf="price.touched && price.invalid">
+      <div *ngIf="price.errors.required">price is required</div>
+      <div *ngIf="price.errors.min">price shoud be 0 or higher</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="category">Category</label>
@@ -24,8 +27,11 @@
   </div>
   <div class="form-group">
     <label for="imageUrl">image Url</label>
-    <input #imageUrl="ngModel" ngModel name="imageUrl" id="imageUrl" type="text" class="form-control" required>
-    <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">imgUrl is required</div>
+    <input #imageUrl="ngModel" ngModel name="imageUrl" id="imageUrl" type="text" class="form-control" required url>
+    <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">
+      <div *ngIf="imageUrl.errors.required">imgUrl is required</div>
+      <div *ngIf="imageUrl.errors.url">pls enter a valid url</div>      
+    </div>
   </div>
   <button class="btn btn-primary">save</button>
 </form>
