@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from './../product.service';
-import { CategoryService } from './../category.service';
+import { ActivatedRoute } from '@angular/router';
+import { Product } from './../models/product';
 
 @Component({
   selector: 'app-products',
@@ -9,12 +10,28 @@ import { CategoryService } from './../category.service';
 })
 export class ProductsComponent  {
 
-  products$;
-  categories$;
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
+  category:string;
 
-  constructor(productService: ProductService, categoryService: CategoryService) {
-    this.products$ = productService.getAll();
-    this.categories$ = categoryService.getAll();
+  constructor(
+    route: ActivatedRoute,
+    productService: ProductService
+     ) {
+
+    productService.getAll().subscribe(products => {//dute in firebase si ia toate produsele
+      this.products = products;
+
+      route.queryParamMap.subscribe(params => { //obtinem curent rout parametru
+        this.category = params.get('category');
+  
+        this.filteredProducts = (this.category) ? //filtreaza produsele in dependenta de categorie
+          this.products.filter(p => p.category === this.category) :
+          this.products;
+    }); 
+
+    
+    });
    }
 
     
